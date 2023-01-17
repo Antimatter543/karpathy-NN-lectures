@@ -10,11 +10,13 @@ That I found fun!
 
 | Name | Jupyter File |  Colab Page
 | ---  | --- | --- |
-Makemore - Video 2 | [Click here](https://github.com/Antimatter543/karpathy-NN-lectures/blob/main/2%20-%20makemore/clean_makemore.ipynb) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Antimatter543/karpathy-NN-lectures/blob/main/2%20-%20makemore/clean_makemore.ipynb)
+Makemore - Video 2 | [Click here](https://github.com/Antimatter543/karpathy-NN-lectures/blob/main/2%20-%20makemore/makemore.ipynb) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Antimatter543/karpathy-NN-lectures/blob/main/2%20-%20makemore/makemore.ipynb)
 Exercises - Video 2 | [Click here](https://github.com/Antimatter543/karpathy-NN-lectures/blob/main/2%20-%20makemore/vid_exercises.ipynb) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Antimatter543/karpathy-NN-lectures/blob/main/2%20-%20makemore/vid_exercises.ipynb)
 
 
 ## Video summaries (by me)
+<!-- Partially so I have an easier time putting these on my resume 😳 -->
+
 ### Video 1 - Micrograd
 A bare implementation of neural networks. Created a Value wrapper class, implemented binary operations and backwards calls to allow a backwards call through mathematical expressions. Built neurons, layers, and MLP classes and forward passed data inputs with targets. Called backwards on the value, updated weights; achieving gradient descent and thus a neural net.
 
