@@ -26,6 +26,10 @@ A character level bigram model for name generation. Evaluated using negative log
 ### Video 3 - Makemore NLP 
 Like makemore, but we went into depth about creating multiple layers and generalising to a *context size* -- how many characters we use to predict the next one. Also embedded characters, and focused on finetuning hyperparameters like learning rate, embedding size, number of layers, ... Effectively recreated the model from the [Bengio et al. 2003 MLP language model paper](https://www.jmlr.org/papers/volume3/bengio03a/bengio03a.pdf). Worked on many basics of ML: model training, learning rate tuning, hyperparameters, evaluation, train/dev/test splits, under/overfitting, etc.).
 
+
+### Video 4 - Makemore, BatchNorm
+- Initialised the NN to have a much better initial loss (no hockey stick 'easy gains'!) (you should always have some rough idea of what initial loss should look like).
+
 <!-- ### Colab notebooks
 | Colab Page | Video
 | --- | --- |
