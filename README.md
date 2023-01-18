@@ -2,11 +2,14 @@
 
 Check out the notebooks and my code to see what I've actually written! Used numpy, pytorch (my tensors are flowing), jupyter, matplotlib.
 
+By the way, after some thinking, I consider the two most pivotal/important to understand moments in this whole thing about the entirety of ML would be:
+- The backpropagation, via a local derivative and the next higher's gradient, and  how that cascades through a whole (differentiable) system so you.
+- This little codeblock in 2 - makemore (unclean version) that explains W1, and that matrix multiplication bit (right underneath a pltshow).
 
 ## Snippets from my notebooks
 That I found fun!
 (like, the counts matrix, ..., the pltshow of my actual weights gradient -- shows what effect the weight has on the final loss! So crazy, and so cool.)
->> Do an open in collab for our 2 - makemore vid exercises?? I think that's a good representation of stuff we can do/we have been doing.
+<!-- >> Do an open in collab for our 2 - makemore vid exercises?? I think that's a good representation of stuff we can do/we have been doing. -->
 
 | Name | Jupyter File |  Colab Page
 | ---  | --- | --- |
