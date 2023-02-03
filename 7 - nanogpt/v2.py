@@ -93,8 +93,20 @@ class MultiHeadAttention(nn.Module):
     def forward(self, x):
         out = torch.cat([h(x) for h in self.heads], dim=-1) # concat across the channels (last dim)
         return out
-    
 
+
+class FeedForward(nn.Module):
+    """ literally a simple linear layer followed by a non-linearity """
+
+    def __init__(self, n_embd):
+        super().__init__()
+        self.net = nn.Sequential(
+            nn.Linear(n_embd, n_embd),
+            nn.ReLU(),
+        )
+
+    def forward(self, x): # This is on a per token level btw.
+        return self.net(x)
 # super simple bigram model
 class BigramLanguageModel(nn.Module):
 
@@ -104,6 +116,7 @@ class BigramLanguageModel(nn.Module):
         self.token_embedding_table = nn.Embedding(vocab_size, n_embd) # Number of dimensions we want for each vocab. Legit just a lookup table.
         self.position_embedding_table = nn.Embedding(block_size, n_embd) # || We want to embed the positions too
         self.sa_head = MultiHeadAttention(4, n_embd//4) # lets us consider previous tokens with different affinities/strengths. || I.e 4 heads of 8-dimensional self-attention
+        self.ffwd = FeedForward(n_embd)
         self.lm_head = nn.Linear(n_embd, vocab_size)
 
     def forward(self, idx, targets=None):
@@ -113,8 +126,12 @@ class BigramLanguageModel(nn.Module):
         tok_emb = self.token_embedding_table(idx) # (B,T,C)
         pos_emb = self.position_embedding_table(torch.arange(T, device=device)) # (T,C). Embeds basically every number 0 - T-1 into the table to make (T,C).
         x = tok_emb + pos_emb # (B,T,C) + (T,C) -> right aligns TC to (1,T,C), then broadcasts across the batch dimension (because well, over the batch the position embeds would be the same). || ON THE DIAGRAM, THIS IS POS ENCODING + OUTPUT EMBEDDING ADD
-        x = self.sa_head(x) # apply one head of self-attention || Multiple heads now (B,T,C) || Masked multi-head attention
-        logits = self.lm_head(x) # (B,T, vocab_size) 
+        x = self.sa_head(x) # apply one head of self-attention || Multiple heads now (B,T,C) || Masked multi-head attention. No multi-head attention (i.e block above it in the diagram) since that connects to encoder (cross attention to encoder -- we haven't used that so yea)
+
+        # Feed forward -- lets it 'think' about the data that the tokens have given it. Before, they looked at each other but didn't have a lot of time to process wtf they each are. Kinda??
+        x == self.ffwd(x) ## || So The self attention is the communication between tokens and gathers their data (and how they impact each other). This layer  processes each token by itself || (B,T,C)
+
+        logits = self.lm_head(x) # (B,T, vocab_size)  || This is the final linear (outside the big block)
         
         if targets is None:
             loss = None
