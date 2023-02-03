@@ -83,6 +83,17 @@ class Head(nn.Module):
         out = wei @ v # (B, T, T) @ (B, T, C) -> (B, T, C)
         return out
 
+class MultiHeadAttention(nn.Module):
+    """ multiple heads of self-attention in parallel """
+
+    def __init__(self, num_heads, head_size):
+        super().__init__()
+        self.heads = nn.ModuleList([Head(head_size) for _ in range(num_heads)])
+
+    def forward(self, x):
+        out = torch.cat([h(x) for h in self.heads], dim=-1) # concat across the channels (last dim)
+        return out
+    
 
 # super simple bigram model
 class BigramLanguageModel(nn.Module):
@@ -92,7 +103,7 @@ class BigramLanguageModel(nn.Module):
         # each token directly reads off the logits for the next token from a lookup table
         self.token_embedding_table = nn.Embedding(vocab_size, n_embd) # Number of dimensions we want for each vocab. Legit just a lookup table.
         self.position_embedding_table = nn.Embedding(block_size, n_embd) # || We want to embed the positions too
-        self.sa_head = Head(n_embd) # lets us consider previous tokens with different affinities/strengths.
+        self.sa_head = MultiHeadAttention(4, n_embd//4) # lets us consider previous tokens with different affinities/strengths. || I.e 4 heads of 8-dimensional self-attention
         self.lm_head = nn.Linear(n_embd, vocab_size)
 
     def forward(self, idx, targets=None):
@@ -101,9 +112,9 @@ class BigramLanguageModel(nn.Module):
         # idx and targets are both (B,T) tensor of integers. B is batch size, T is block size (context length) -- how long each training example should be; how many tokens are considered?
         tok_emb = self.token_embedding_table(idx) # (B,T,C)
         pos_emb = self.position_embedding_table(torch.arange(T, device=device)) # (T,C). Embeds basically every number 0 - T-1 into the table to make (T,C).
-        x = tok_emb + pos_emb # (B,T,C) + (T,C) -> right aligns TC to (1,T,C), then broadcasts across the batch dimension (because well, over the batch the position embeds would be the same).
-        x = self.sa_head(x) # apply one head of self-attention (B,T,C)
-        logits = self.lm_head(x) # (B,T, vocab_size)
+        x = tok_emb + pos_emb # (B,T,C) + (T,C) -> right aligns TC to (1,T,C), then broadcasts across the batch dimension (because well, over the batch the position embeds would be the same). || ON THE DIAGRAM, THIS IS POS ENCODING + OUTPUT EMBEDDING ADD
+        x = self.sa_head(x) # apply one head of self-attention || Multiple heads now (B,T,C) || Masked multi-head attention
+        logits = self.lm_head(x) # (B,T, vocab_size) 
         
         if targets is None:
             loss = None
@@ -120,11 +131,11 @@ class BigramLanguageModel(nn.Module):
         for _ in range(max_new_tokens):
             
             # crop idx to last #block_size tokens (like 'scrolling') bc we have positional embeddings now (as our positional emb. table only has embeds for up to block size)
-            idx_crop = idx[:, :block_size]
+            idx_cond = idx[:, -block_size:]
 
 
             # get the predictions
-            logits, loss = self(idx_crop)
+            logits, loss = self(idx_cond)
             # focus only on the last time step
             logits = logits[:, -1, :] # becomes (B, C)
             # apply softmax to get probabilities
