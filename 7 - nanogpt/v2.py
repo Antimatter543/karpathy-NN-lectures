@@ -77,7 +77,8 @@ class Head(nn.Module):
         # compute attention scores ("affinities")
         wei = q @ k.transpose(-2,-1) * C**-0.5 # (B, T, C) @ (B, C, T) -> (B, T, T) || Scaled attention
         wei = wei.masked_fill(self.tril[:T, :T] == 0, float('-inf')) # (B, T, T) || Makes this a decoder block (cannot talk to future)
-        wei = F.softmax(wei, dim=-1) # (B, T, T)
+        wei = F.softmax(wei, dim=-1) # (B, T, T) || Convert to probabilities
+        
         # perform the weighted aggregation of the values
         v = self.value(x) # (B,T,C)
         out = wei @ v # (B, T, T) @ (B, T, C) -> (B, T, C)
@@ -137,8 +138,9 @@ class Block(nn.Module):
         # Feed forward -- lets it 'think' about the data that the tokens have given it. Before, they looked at each other but didn't have a lot of time to process wtf they each are. Kinda??
 
         x == self.ffwd(self.ln2(x)) ## || So The self attention is the communication between tokens and gathers their data (and how they impact each other). This layer  processes each token by itself || (B,T,C) || Added residual/skip connections
+        
         return x
-class BigramLanguageModel(nn.Module):
+class BigramLanguageModel(nn.Module): # well, it's the GPT model now lol
 
     def __init__(self):
         super().__init__()
@@ -152,6 +154,8 @@ class BigramLanguageModel(nn.Module):
             nn.LayerNorm(n_embd)
         )
         self.lm_head = nn.Linear(n_embd, vocab_size) # Final linear layer that decodes into the vocab_size
+        # self.count = 0 
+		
 
     def forward(self, idx, targets=None):
         B, T = idx.shape
@@ -170,7 +174,9 @@ class BigramLanguageModel(nn.Module):
             loss = None
         else:
             B, T, C = logits.shape
-            logits = logits.view(B*T, C)
+            logits = logits.view(B*T, C) # C is vocab_size 
+            # self.count+=1
+            # print(f'{C=}, {self.count}')
             targets = targets.view(B*T)
             loss = F.cross_entropy(logits, targets)
 
@@ -212,12 +218,14 @@ for iter in range(max_iters):
 
     # sample a batch of data
     xb, yb = get_batch('train')
-    # evaluate the loss
+    # print(xb.shape, "HEYYYYYYY")
+    
+    # evaluate the loss and gradient descend
     logits, loss = model(xb, yb)
     optimizer.zero_grad(set_to_none=True)
     loss.backward()
     optimizer.step()
 
-# generate from the model
-context = torch.zeros((1, 1), dtype=torch.long, device=device)
-print(decode(m.generate(context, max_new_tokens=500)[0].tolist()))
+# # generate from the model
+# context = torch.zeros((1, 1), dtype=torch.long, device=device)
+# print(decode(m.generate(context, max_new_tokens=500)[0].tolist()))

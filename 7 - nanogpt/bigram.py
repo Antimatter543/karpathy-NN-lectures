@@ -58,7 +58,7 @@ def estimate_loss():
     model.train()
     return out
 
-# super simple bigram model
+# super simple bigram model ||
 class BigramLanguageModel(nn.Module):
 
     def __init__(self):
