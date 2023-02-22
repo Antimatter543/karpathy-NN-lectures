@@ -33,6 +33,8 @@ Like makemore, but we went into depth about creating multiple layers and general
 ### Video 4 - Makemore, BatchNorm
 - Initialised the NN to have a much better initial loss (no hockey stick 'easy gains'!) (you should always have some rough idea of what initial loss should look like).
 
+I've completed videos 5-7, but I'll write up their summaries later because... procrastination?
+
 <!-- ### Colab notebooks
 | Colab Page | Video
 | --- | --- |
