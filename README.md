@@ -16,7 +16,29 @@ That I found fun!
 Makemore - Video 2 | [Click here](https://github.com/Antimatter543/karpathy-NN-lectures/blob/main/2%20-%20makemore/makemore.ipynb) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Antimatter543/karpathy-NN-lectures/blob/main/2%20-%20makemore/makemore.ipynb)
 Exercises - Video 2 | [Click here](https://github.com/Antimatter543/karpathy-NN-lectures/blob/main/2%20-%20makemore/vid_exercises.ipynb) | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Antimatter543/karpathy-NN-lectures/blob/main/2%20-%20makemore/vid_exercises.ipynb)
 
+###  Lecture 2 -- Makemore!
+Implementing a proper language model -- just as classic bigram for now, and a vs a bigram NN.
+Bigram count! 
+![Bigram count](./assets/image.png)
 
+Viewing the activation rates of neurons in a single layer for fun 
+![Alt text](./assets/image-3.png)
+
+#### Lecture 3 
+Visualising our character embeddings 
+![Alt text](./assets/image-4.png)
+
+#### Lecture 4 -- Debugging NNs, batchnorm, ...
+-  This lecture shows a lot of technical stuff about debugging neural network, checking its statistics and 'health'. Check out the [notebook](./4%20-%20makemore-pt3/makemore-batchnorm.ipynb)!
+-  
+- Tanh is saturated!!
+![Alt text](./assets/image-7.png)
+
+Checking for dead neurons, and making sure there's no entire layers of dead neurons
+![Alt text](./assets/image-5.png)
+
+Looking at our activation distribution after adding batchnorm (they are much more equal now -- good)
+![Alt text](./assets/image-6.png)
 ## Video summaries (by me)
 <!-- Partially so I have an easier time putting these on my resume 😳 -->
 
