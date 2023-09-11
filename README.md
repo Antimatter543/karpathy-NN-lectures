@@ -1,12 +1,12 @@
 # Karpathy's Zero to Hero NN Series
 
-Check out the notebooks and my code to see what I've actually written! Used numpy, pytorch (my tensors are flowing), jupyter, matplotlib. These notebooks (especially the exercises) are blood, sweat and tears. IMO, this series functions as something more practical and useful than any ML course in (undergrad) university. 
+Check out the notebooks and my code to see what I've actually written! Used numpy, pytorch (my tensors are flowing), jupyter, matplotlib. Here is [Karpathy's summary](https://karpathy.ai/zero-to-hero.html) of the lectures.
 
 By the way, after some thinking, I consider the two most pivotal/important to understand moments in this whole thing about the entirety of ML would be:
 - The backpropagation, via a local derivative and the next higher's gradient, and  how that cascades through a whole (differentiable) system so you.
 - This little codeblock in 2 - makemore (unclean version) that explains W1, and that matrix multiplication bit (right underneath a pltshow).
 
-The other lectures are important and very useful too, but these two are fundamental for understanding. The rest is "basically" optimisation.
+The other lectures are important and very useful too, but these two are fundamental for understanding. The rest is "basically" optimisation (there's a *lot* in "basically").
 ## Snippets from my notebooks
 That I found fun!
 (like, the counts matrix, ..., the pltshow of my actual weights gradient -- shows what effect the weight has on the final loss! So crazy, and so cool.)
